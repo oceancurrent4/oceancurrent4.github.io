@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>img</title>
+    <style>
+        /* CSS 样式保持不变 */
+        #buttons span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #buttons span.on {
+            background-color: green;
+        }
+        .arrow {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: lightgray;
+            text-align: center;
+            line-height: 20px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加具有 id="buttons" 的 div 元素 -->
+    <div id="buttons"></div>
+    <div id="container"></div>
+    <script>
+        var images = [
+            "https://5b0988e595225.cdn.sohucs.com/images/20190528/c79002c32903474b8118169aab81dda7.jpeg",
+            "https://p5.itc.cn/q_70/images03/20220726/35cb6ce2194e418f9c9cab32efbcfb03.jpeg",
+            "https://img1.baidu.com/it/u=742271552,807670422&fm=253&fmt=auto&app=138&f=JPEG?w=749&h=500",
+            "https://p1.itc.cn/q_70/images03/20220623/f07e121718ec47868b900f8c437976dc.jpeg"
+        ];
+        var currentIndex = 0;
+        var container = document.getElementById("container");
+        var buttons = document.getElementById("buttons"); // 修改获取元素方式
+
+        function generateImageMenu() {
+            var list = document.createElement("div");
+            list.id = "list";
+            for (var i = 0; i < images.length; i++) {
+                var image = document.createElement("img");
+                image.src = images[i];
+                list.appendChild(image);
+            }
+            container.appendChild(list);
+        }
+
+        function switchImage(index) {
+            var list = document.getElementById("list");
+            var imgs = list.getElementsByTagName("img");
+            for (var i = 0; i < imgs.length; i++) {
+                if (i === index) {
+                    imgs[i].style.display = "block";
+                } else {
+                    imgs[i].style.display = "none";
+                }
+            }
+        }
+
+        function switchButton(index) {
+            var buttons = document.getElementById("buttons").getElementsByTagName("span"); // 修改获取元素方式
+            for (var i = 0; i < buttons.length; i++) {
+                if (i === index) {
+                    buttons[i].className = "on";
+                } else {
+                    buttons[i].className = "";
+                }
+            }
+        }
+
+        function autoSwitchImage() {
+            currentIndex++;
+            if (currentIndex >= images.length) {
+                currentIndex = 0;
+            }
+            switchImage(currentIndex);
+            switchButton(currentIndex);
+        }
+
+        function initEventHandlers() {
+            // 修改获取元素方式
+            for (var i = 0; i < images.length; i++) {
+                var button = document.createElement("span");
+                button.setAttribute("index", i);
+                button.addEventListener("click", function () {
+                    currentIndex = parseInt(this.getAttribute("index"));
+                    switchImage(currentIndex);
+                    switchButton(currentIndex);
+                });
+                buttons.appendChild(button);
+            }
+            
+            setInterval(autoSwitchImage, 3000);
+        }
+
+        generateImageMenu();
+        switchImage(currentIndex);
+        switchButton(currentIndex);
+        initEventHandlers();
+    </script>
+</body>
+</html>
